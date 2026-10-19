@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>翻牌抽獎 V1.7 · Flip Draw</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;color-scheme:light;--bg:#f5f5f2;--panel:#ffffff;--ink:#242d35;--muted:#687681;--edge:#dce2e6;--accent:#456a87;--accentText:#fff;--back1:#e2eaf0;--back2:#64839b;--backInk:#fff;--win1:#ffe4a5;--win2:#df6944;--lose1:#dce5ed;--lose2:#7893a9;--shadow:0 12px 32px #21384b17}
+body[data-theme="fantasy"]{color-scheme:dark;--bg:#121329;--panel:#20213e;--ink:#f4eefd;--muted:#bab2d2;--edge:#4c456c;--accent:#9b77e8;--accentText:#fff;--back1:#353065;--back2:#8560cb;--backInk:#fff;--win1:#ffe4a0;--win2:#b95382;--lose1:#5c678d;--lose2:#303b60;--shadow:0 16px 42px #09081870}
+body[data-theme="casino"]{color-scheme:dark;--bg:#0c201b;--panel:#14332a;--ink:#fff7e4;--muted:#b6c6b6;--edge:#426052;--accent:#d3a753;--accentText:#19241d;--back1:#193d33;--back2:#c8a45d;--backInk:#fce7a4;--win1:#ffde82;--win2:#ac4335;--lose1:#8a9fae;--lose2:#3b6177;--shadow:0 16px 42px #0006}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);transition:background .4s,color .4s}button,input,select,textarea{font:inherit}button,select,input,textarea{border-radius:12px}button{cursor:pointer;border:1px solid var(--edge);background:var(--panel);color:var(--ink);padding:11px 16px;min-height:44px;font-weight:650}button:hover:not(:disabled){filter:brightness(1.07)}button:disabled{opacity:.4;cursor:not-allowed}.primary{background:var(--accent);color:var(--accentText);border-color:transparent}.danger{color:#c04d51}.wrap{max-width:1120px;margin:auto;padding:22px 22px 50px}header{display:flex;justify-content:space-between;gap:18px;align-items:center;padding-bottom:24px;border-bottom:1px solid var(--edge);flex-wrap:wrap}h1{font-size:clamp(22px,3vw,32px);margin:0;letter-spacing:.03em}h2{margin:0 0 12px;font-size:22px}p{color:var(--muted);line-height:1.7}.tools,.actions,.metrics,.header-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.header-tools label{font-size:13px;color:var(--muted)}select,input,textarea{background:var(--panel);border:1px solid var(--edge);color:var(--ink);padding:11px;min-height:44px}select{min-width:136px}.view{padding-top:30px}.hidden{display:none!important}.setup-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:24px}.panel{background:var(--panel);border:1px solid var(--edge);padding:25px;border-radius:22px;box-shadow:var(--shadow)}textarea{width:100%;height:320px;resize:vertical;line-height:1.8}label.field{display:block;font-weight:700;margin:16px 0 8px}.radio-row{display:flex;gap:12px;flex-wrap:wrap}.radio-row label{padding:14px;border:1px solid var(--edge);border-radius:14px;cursor:pointer;flex:1;min-width:140px}.radio-row input{min-height:auto}.big-number{width:130px}.notice{border-radius:12px;background:var(--back1);color:var(--ink);padding:13px;margin-top:16px;font-size:14px}.setup-bottom{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-top:20px;flex-wrap:wrap}.metrics{margin:18px 0 24px}.metric{background:var(--panel);border:1px solid var(--edge);border-radius:14px;padding:13px 19px;flex:1;min-width:140px}.metric strong{display:block;font-size:25px}.metric span{font-size:13px;color:var(--muted)}.play-heading{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.status{font-weight:700;color:var(--accent);margin:10px 0 20px;min-height:24px}.cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(8px,2vw,20px);max-width:900px;margin:26px auto 36px;perspective:1200px}.card-slot{aspect-ratio:2/3;min-width:0;position:relative;perspective:900px}.card{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .58s cubic-bezier(.2,.8,.2,1),filter .3s;cursor:pointer;padding:0;border:0;background:transparent;display:block;min-height:0;border-radius:13px}.card:not(.flipped):hover{transform:translateY(-7px) rotateX(5deg) rotateY(-5deg)}.card.flipped{transform:rotateY(180deg);cursor:default}.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform-style:flat;border-radius:13px;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 8px 18px #0002;border:2px solid var(--edge)}.back{background:linear-gradient(145deg,var(--back1),var(--back2));color:var(--backInk);border:4px double var(--backInk)}.back:before{content:"";position:absolute;inset:9px;border:1px solid currentColor;border-radius:8px;opacity:.65}.emblem{font-size:clamp(22px,5vw,62px);font-family:Georgia,serif;opacity:.85}.front{transform:rotateY(180deg);-webkit-transform:rotateY(180deg);padding:9px;text-align:center;font-weight:800;font-size:clamp(11px,1.9vw,22px);overflow-wrap:anywhere;line-height:1.35;color:#27313d;background:linear-gradient(150deg,#fff,#e7eaf0)}.front.win{background:linear-gradient(135deg,var(--win1),var(--win2));color:#43251c}.front.lose{background:linear-gradient(135deg,var(--lose1),var(--lose2));color:#1c3343}.card:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}.play-footer{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;border-top:1px solid var(--edge);padding-top:20px}.winner-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin:20px 0 30px}.winner-item{padding:25px 14px;border-radius:18px;background:linear-gradient(135deg,var(--win1),var(--win2));color:#43251c;text-align:center;font-weight:800;font-size:22px;overflow-wrap:anywhere}.winner-item small{display:block;font-size:12px;margin-bottom:9px}.names{line-height:2.1;color:var(--muted);overflow-wrap:anywhere}.overlay{position:fixed;inset:0;z-index:10;background:#071018bd;display:flex;align-items:center;justify-content:center;padding:22px;cursor:pointer}.reveal{width:min(340px,75vw);aspect-ratio:2/3;position:relative;transform-style:preserve-3d;animation:pop .6s cubic-bezier(.2,.8,.2,1) both}.reveal .face{font-size:clamp(26px,5vw,42px);border-width:5px;box-shadow:0 0 55px #eab65b80}.reveal .front{font-size:clamp(25px,5vw,42px)}.reveal.flip{transform:rotateY(180deg);transition:transform .7s}.overlay-hint{position:absolute;bottom:24px;left:0;right:0;text-align:center;color:#fff;font-size:16px}.confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}.particle{position:absolute;width:7px;height:13px;top:-15px;animation:fall 2.5s linear forwards;background:#e8b94d}.shuffling .card-slot:not(.settled){animation:none}.shuffling .card-slot:nth-child(2n){animation-delay:-.25s}.shuffling .card-slot:nth-child(3n){animation-delay:-.4s}@keyframes mix{to{transform:translate(8px,-16px) rotate(5deg) scale(.93)}}@keyframes pop{from{opacity:0;scale:.5;translate:0 50px}to{opacity:1;scale:1;translate:0 0}}@keyframes fall{to{transform:translateY(110vh) rotate(620deg);opacity:.15}}@media(max-width:700px){.setup-grid{grid-template-columns:1fr}.wrap{padding:16px 12px 30px}.panel{padding:16px}.cards{gap:7px}.face{border-radius:7px}.back{border-width:2px}.back:before{inset:4px}.card{border-radius:7px}.metric{min-width:95px;padding:10px}.metric strong{font-size:20px}.actions button{flex:1}.emblem{font-size:24px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* V1.2 Chrome 3D 修正：明確控制兩面的可見性，避免合成圖層把正面隱藏。 */
+.card .back,.reveal .back{opacity:1;visibility:visible;transition:opacity .15s linear,visibility 0s linear .15s}
+.card .front,.reveal .front{opacity:0;visibility:hidden;transition:opacity .15s linear,visibility 0s linear .15s}
+.card.flipped .back,.reveal.flip .back{opacity:0;visibility:hidden;transition:opacity .15s linear,visibility 0s linear .15s}
+.card.flipped .front,.reveal.flip .front{opacity:1;visibility:visible;transition:opacity .15s linear,visibility 0s linear 0s}
+.card.flipped .front{transform:rotateY(180deg) translateZ(1px)}
+.reveal.flip .front{transform:rotateY(180deg) translateZ(1px)}
+
+/* V1.3: Chrome-safe card faces. The final state does not rely on nested 3D backface compositing. */
+.card,.reveal{transform-style:flat!important}
+.card .face,.reveal .face{transform:none!important;-webkit-transform:none!important;backface-visibility:visible!important;-webkit-backface-visibility:visible!important}
+.card:not(.flipped) .back,.reveal:not(.flip) .back{display:flex!important;opacity:1!important;visibility:visible!important}
+.card:not(.flipped) .front,.reveal:not(.flip) .front{display:none!important}
+.card.flipped,.reveal.flip{transform:none!important}
+.card.flipped .back,.reveal.flip .back{display:none!important}
+.card.flipped .front,.reveal.flip .front{display:flex!important;opacity:1!important;visibility:visible!important}
+.card.flipped:hover{transform:none!important}
+
+/* V1.4: 結果卡牌視覺層級。覆寫全域 disabled 透明度，確保姓名清晰。 */
+.card.flipped:disabled{opacity:1!important;filter:none!important;cursor:default}
+.card.flipped .front{font-weight:850;letter-spacing:.025em;text-shadow:0 1px 1px #ffffff38}
+/* 中獎：亮色卡面、金色邊框及柔和高亮 */
+.card.flipped .front.win{background:linear-gradient(145deg,#fff3bf 0%,#ffd47b 42%,#f4a64e 100%)!important;color:#53280e!important;border:3px solid #ffe8a0!important;box-shadow:0 0 0 2px #d7a63c,0 0 23px 5px #f5c75a8c,0 12px 24px #0003!important}
+body[data-theme="fantasy"] .card.flipped .front.win{background:linear-gradient(145deg,#fff0bd,#f6c875 48%,#d78b77)!important;box-shadow:0 0 0 2px #e5bc6a,0 0 28px 6px #d6a4ff88,0 12px 24px #0005!important}
+body[data-theme="casino"] .card.flipped .front.win{background:linear-gradient(145deg,#fff1ba,#eec56c 55%,#c98543)!important;box-shadow:0 0 0 2px #e8bd63,0 0 26px 6px #eab44e91,0 12px 24px #0006!important}
+/* 淘汰：保持灰藍低彩度，但提高字色和底色的亮度差。 */
+.card.flipped .front.lose{background:linear-gradient(145deg,#d8e1e9,#a9bac9)!important;color:#23394b!important;border:2px solid #91a5b6!important;box-shadow:0 5px 12px #0002!important;text-shadow:0 1px 0 #ffffff70!important}
+body[data-theme="fantasy"] .card.flipped .front.lose{background:linear-gradient(145deg,#63718d,#465471)!important;color:#f2f5ff!important;border-color:#8190ab!important;text-shadow:0 1px 2px #1c233f!important}
+body[data-theme="casino"] .card.flipped .front.lose{background:linear-gradient(145deg,#8fa5b1,#607b8b)!important;color:#102a39!important;border-color:#9baeb6!important;text-shadow:0 1px 0 #dce8ef80!important}
+
+/* V1.5 winner reveal: source slot stays blank until face-up card returns */
+.card-slot.revealing .card{visibility:hidden!important}
+.reveal{transform-origin:center center;will-change:transform;animation:none!important}
+.reveal.flip .front{background:linear-gradient(145deg,#fff3bf,#ffd47b 42%,#f4a64e)!important;color:#53280e!important;border:4px solid #ffe8a0!important;box-shadow:0 0 40px #f5c75a8c!important}
+/* 洗牌時原位置完全隱藏，僅顯示移動中的實體卡牌複本。 */
+.cards.shuffle-in-progress .card-slot:has(.card:not(.flipped)){visibility:hidden!important;opacity:0!important}
+.cards.shuffle-in-progress .card-slot:has(.card:not(.flipped)) .card{visibility:hidden!important}
+.play-mode-switch{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.play-mode-switch label{font-size:14px;font-weight:700;color:var(--muted)}
+.play-mode-switch select{min-width:150px}
+</style></head><body data-theme="minimal"><div class="wrap"><header><h1>✦ 翻牌抽獎 <span style="font-size:12px;color:var(--muted);font-weight:400">FLIP DRAW</span></h1><div class="header-tools"><label for="theme">視覺主題</label><select id="theme"><option value="minimal">現代極簡</option><option value="fantasy">奇幻遊戲</option><option value="casino">高級賭場</option></select><button id="sound" title="音效開關" aria-label="音效開關">🔇</button><button id="fullscreen" title="全螢幕">⛶ 全螢幕</button></div></header>
+<main><section id="setup" class="view"><h2>建立抽獎活動</h2><p>每行一位參加者，可直接貼上 Excel 單欄名單。</p><div class="setup-grid"><div class="panel"><label class="field" for="names">參加者名單</label><textarea id="names" spellcheck="false" placeholder="王小明&#10;陳小華&#10;林大同&#10;李小美"></textarea><p id="nameCount" aria-live="polite">目前 0 位參加者</p></div><div class="panel"><h2>抽獎設定</h2><label class="field">抽獎模式</label><div class="radio-row"><label><input type="radio" name="mode" value="winner" checked> 🏆 中獎模式</label><label><input type="radio" name="mode" value="elimination"> ❄️ 淘汰模式</label></div><label class="field" for="target">中獎人數</label><input class="big-number" type="number" id="target" value="3" min="1" step="1"><div class="notice">中獎模式：翻開即中獎。<br>淘汰模式：翻開即淘汰，最後留下指定人數，再逐張揭曉。</div><p id="setupMsg" role="status"></p></div></div><div class="setup-bottom"><span>抽獎會自動儲存在目前瀏覽器。</span><div class="actions"><button id="resume" class="hidden">繼續上次抽獎</button><button class="primary" id="start">開始抽獎 →</button></div></div></section>
+<section id="play" class="view hidden"><div class="play-heading"><div><h2 id="playTitle">抽獎進行中</h2><p id="playSubtitle"></p></div><div class="actions"><div class="play-mode-switch"><label for="playMode">抽獎模式</label><select id="playMode" aria-label="切換抽獎模式"><option value="winner">🏆 中獎模式</option><option value="elimination">❄️ 淘汰模式</option></select></div><button id="shuffle" class="primary">⇄ 重新洗牌</button><button id="undo">↶ 撤銷翻牌</button><button id="auto">▶ 自動翻牌</button></div></div><div class="metrics"><div class="metric"><strong id="remaining">0</strong><span>未翻開</span></div><div class="metric"><strong id="wins">0</strong><span>已揭曉中獎</span></div><div class="metric"><strong id="losses">0</strong><span>已淘汰</span></div></div><div class="status" id="status" aria-live="polite"></div><div class="cards" id="cards"></div><div class="play-footer"><div class="actions"><button id="back">⚙ 返回設定</button><button id="restart">↻ 重新開始</button></div><button id="results" class="primary" disabled>查看結算 →</button></div></section>
+<section id="summary" class="view hidden"><div style="text-align:center"><h2 style="font-size:34px">🎉 抽獎完成！</h2><p id="summaryStats"></p></div><h2>🏆 中獎名單</h2><div id="winnerGrid" class="winner-grid"></div><h2 id="otherTitle">未中獎名單</h2><div class="panel names" id="otherNames"></div><div class="actions" style="justify-content:center;margin-top:28px"><button class="primary" id="again">使用相同名單重新抽獎</button><button id="summaryBack">返回設定頁面</button></div></section></main></div>
+<div id="overlay" class="overlay hidden" role="dialog" aria-modal="true" aria-label="中獎揭曉" tabindex="-1"><div id="confetti" class="confetti"></div><div id="reveal" class="reveal"><div class="face back"><span class="emblem">✦</span></div><div id="revealFront" class="face front win"></div></div><div id="overlayHint" class="overlay-hint">點擊任意位置繼續</div></div>
+<script>
+(()=>{'use strict';const $=id=>document.getElementById(id);const KEY='flipdraw_state_v1',THEME='flipdraw_theme_v1';let state=null,history=[],busy=false,auto=false,stopAuto=false,activeToken=0,soundOn=false,audio=null,overlayResolve=null;const sleep=ms=>new Promise(r=>setTimeout(r,ms));const clone=x=>JSON.parse(JSON.stringify(x));const namesFromText=()=> $('names').value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}function storeTheme(v){try{localStorage.setItem(THEME,v)}catch(e){}}function getStored(k){try{return localStorage.getItem(k)}catch(e){return null}}function random(n){const a=new Uint32Array(1),max=4294967296,limit=Math.floor(max/n)*n;let x;do{crypto.getRandomValues(a);x=a[0]}while(x>=limit);return x%n}function mix(a){for(let i=a.length-1;i>0;i--){const j=random(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}function show(view){for(const id of ['setup','play','summary'])$(id).classList.toggle('hidden',id!==view)}function count(){ $('nameCount').textContent=`目前 ${namesFromText().length} 位參加者` }function validState(s){return s&&Array.isArray(s.cards)&&s.cards.length>0&&s.cards.length<=300&&['winner','elimination'].includes(s.mode)&&Number.isInteger(s.target)&&s.target>=1&&s.target<=s.cards.length&&s.cards.every(c=>typeof c.name==='string'&&['hidden','win','lose'].includes(c.status))}function updateResume(){const raw=getStored(KEY);let s;try{s=JSON.parse(raw)}catch(e){}$('resume').classList.toggle('hidden',!validState(s));}function applyTheme(t){if(!['minimal','fantasy','casino'].includes(t))t='minimal';document.body.dataset.theme=t;$('theme').value=t;storeTheme(t)}function beep(type){if(!soundOn)return;try{audio??=new (window.AudioContext||window.webkitAudioContext)();audio.resume();const now=audio.currentTime;let freq=type==='win'?660:type==='shuffle'?270:430;for(let i=0;i<(type==='win'?3:1);i++){const o=audio.createOscillator(),g=audio.createGain();o.type='sine';o.frequency.value=freq*(1+i*.25);o.connect(g);g.connect(audio.destination);g.gain.setValueAtTime(.0001,now+i*.12);g.gain.exponentialRampToValueAtTime(.06,now+i*.12+.012);g.gain.exponentialRampToValueAtTime(.0001,now+i*.12+.15);o.start(now+i*.12);o.stop(now+i*.12+.17)}}catch(e){}}function counts(){return {hidden:state.cards.filter(c=>c.status==='hidden').length,win:state.cards.filter(c=>c.status==='win').length,lose:state.cards.filter(c=>c.status==='lose').length}}function winnersKnown(){const c=counts();return c.win===state.target||(state.mode==='elimination'&&c.hidden===state.target-c.win)}function complete(){const c=counts();return c.win===state.target}function render(){if(!state)return;const c=counts(),done=complete(),finalReveal=state.mode==='elimination'&&winnersKnown()&&c.hidden>0;$('playTitle').textContent=done?'抽獎完成':finalReveal?'最後中獎者揭曉':'抽獎進行中';$('playMode').value=state.mode;$('playMode').disabled=busy||auto;$('playSubtitle').textContent=`${state.mode==='winner'?'中獎模式':'淘汰模式'} · ${state.cards.length} 人取 ${state.target} 人`;$('remaining').textContent=c.hidden;$('wins').textContent=c.win;$('losses').textContent=c.lose;$('status').textContent=done?'所有結果已揭曉，可以查看結算。':finalReveal?`已決出 ${state.target} 位中獎者，請逐張揭曉或使用自動翻牌。`:state.mode==='winner'?`還需抽出 ${state.target-c.win} 位中獎者。`:`還需淘汰 ${Math.max(0,c.hidden-(state.target-c.win))} 位參加者。`;$('cards').replaceChildren(...state.cards.map((card,i)=>{const slot=document.createElement('div');slot.className='card-slot';const b=document.createElement('button');b.type='button';b.className='card'+(card.status==='hidden'?'':' flipped');b.dataset.id=card.id;b.disabled=busy||auto||card.status!=='hidden'||done;b.setAttribute('aria-label',card.status==='hidden'?`翻開第 ${i+1} 張卡牌`:`${card.name}，${card.status==='win'?'中獎':'淘汰'}`);const back=document.createElement('span');back.className='face back';const symbol=document.createElement('span');symbol.className='emblem';symbol.textContent=document.body.dataset.theme==='casino'?'♠':document.body.dataset.theme==='fantasy'?'✧':'✦';back.append(symbol);const front=document.createElement('span');front.className='face front '+(card.status==='hidden'?'':card.status);front.textContent=card.name;b.append(back,front);b.addEventListener('click',()=>flip(card.id,false));slot.append(b);return slot}));$('undo').disabled=busy||auto||history.length===0;$('shuffle').disabled=busy||auto||done||c.hidden<=1;$('auto').textContent=auto?'Ⅱ 暫停自動翻牌':'▶ 自動翻牌';$('auto').disabled=done||(!auto&&busy);$('results').disabled=!done;$('back').disabled=busy||auto;$('restart').disabled=busy||auto;save()}function lockRender(){render()}function assignStatus(){const c=counts();if(state.mode==='winner')return 'win';return c.hidden<=state.target-c.win?'win':'lose'}function record(){history.push(clone(state));if(history.length>300)history.shift()}function restoreHistory(){if(busy||auto||!history.length)return;state=history.pop();render()}async function showWinner(name,automatic,sourceEl){
+ beep('win');
+ const ov=$('overlay'),rv=$('reveal'),fx=$('confetti');
+ const slot=sourceEl?.closest('.card-slot');
+ const from=sourceEl?.getBoundingClientRect();
+ $('revealFront').textContent=name;
+ rv.classList.remove('flip');
+ fx.replaceChildren();
+ $('overlayHint').textContent=automatic?'中獎揭曉中…':'點擊任意位置讓卡牌返回原位';
+ ov.classList.remove('hidden');
+ if(slot)slot.classList.add('revealing');
+ ov.focus();
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const dest=rv.getBoundingClientRect();
+ const dx=from?from.left+from.width/2-(dest.left+dest.width/2):0;
+ const dy=from?from.top+from.height/2-(dest.top+dest.height/2):0;
+ const scale=from?from.width/dest.width:1;
+ const atOrigin=`translate(${dx}px, ${dy}px) scale(${scale})`;
+ const atCenter='translate(0px, 0px) scale(1)';
+ if(!reduced&&from){
+  const travel=rv.animate([{transform:atOrigin},{transform:atCenter}],{duration:620,easing:'cubic-bezier(.2,.75,.2,1)'});
+  await travel.finished.catch(()=>{});
+ }
+ if(!reduced){
+  const turnOut=rv.animate([{transform:'rotateY(0deg)'},{transform:'rotateY(90deg)'}],{duration:300,easing:'ease-in',fill:'forwards'});
+  await turnOut.finished.catch(()=>{});turnOut.cancel();
+ }
+ rv.classList.add('flip');
+ if(!reduced){
+  const turnIn=rv.animate([{transform:'rotateY(-90deg)'},{transform:'rotateY(0deg)'}],{duration:320,easing:'ease-out'});
+  await turnIn.finished.catch(()=>{});
+ }
+ for(let i=0;i<26;i++){
+  const particle=document.createElement('span');particle.className='particle';
+  particle.style.left=random(100)+'%';particle.style.animationDelay=random(700)/1000+'s';
+  particle.style.background=['#f4c56b','#ef9c65','#b38ee9','#f8e7ad'][i%4];fx.append(particle);
+ }
+ if(automatic)await sleep(1500);
+ else await new Promise(resolve=>{overlayResolve=resolve});
+ overlayResolve=null;
+ fx.replaceChildren();
+ // Keep the winner's face visible while the enlarged card returns to its slot.
+ if(!reduced&&from){
+  const returning=rv.animate([{transform:atCenter},{transform:atOrigin}],{duration:620,easing:'cubic-bezier(.35,0,.25,1)'});
+  await returning.finished.catch(()=>{});
+ }
+ // Reveal the source card only once the returning animation is finished.
+ if(sourceEl){sourceEl.classList.add('flipped');sourceEl.disabled=true;}
+ if(slot)slot.classList.remove('revealing');
+ ov.classList.add('hidden');
+ rv.classList.remove('flip');
+}
+async function flip(id,automatic){
+ if(!state||busy||(!automatic&&auto)||complete())return;
+ const card=state.cards.find(c=>c.id===id);
+ if(!card||card.status!=='hidden')return;
+ busy=true;record();
+ const status=assignStatus();
+ const el=[...$('cards').querySelectorAll('.card')].find(e=>e.dataset.id===id);
+ card.status=status;card.order=state.nextOrder++;
+ if(el){
+  const front=el.querySelector('.front');
+  front.textContent=card.name;front.className='face front '+status;
+  el.disabled=true;
+  el.setAttribute('aria-label',card.name+(status==='win'?'，中獎':'，淘汰'));
+ }
+ if(status==='win'){
+  // Do not flip at the source. Travel to center, enlarge, flip, wait, then return.
+  await showWinner(card.name,automatic,el);
+ }else if(el){
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduced){
+   const a=el.animate([{transform:'rotateY(0deg)'},{transform:'rotateY(90deg)'}],{duration:280,easing:'ease-in',fill:'forwards'});
+   await a.finished.catch(()=>{});a.cancel();
+  }
+  el.classList.add('flipped');
+  if(!reduced){
+   const b=el.animate([{transform:'rotateY(-90deg)'},{transform:'rotateY(0deg)'}],{duration:300,easing:'ease-out'});
+   await b.finished.catch(()=>{});
+  }
+  beep('flip');
+ }
+ save();busy=false;render();
+}
+async function doShuffle(initial=false){
+ if(!state||busy||auto||complete())return;
+ const hidden=state.cards.filter(c=>c.status==='hidden');
+ const shown=state.cards.filter(c=>c.status!=='hidden').sort((a,b)=>a.order-b.order);
+ if(hidden.length<2)return;
+ busy=true;render();beep('shuffle');
+ const grid=$('cards');
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ let layer=null;
+ try{
+   // 第一階段：先把所有已翻開牌移到牌列最後，依揭曉順序排列。
+   // 此時不顯示洗牌動畫，確保觀眾能辨認哪些牌退出洗牌。
+   const before=new Map([...grid.querySelectorAll('.card')].map(el=>[el.dataset.id,el.closest('.card-slot').getBoundingClientRect()]));
+   const needsMove=state.cards.some((card,i)=>card!==(i<hidden.length?hidden[i]:shown[i-hidden.length]));
+   state.cards=[...hidden,...shown];
+   render();
+   if(needsMove&&!reduced){
+     const moves=[...grid.querySelectorAll('.card')].map(el=>{
+       const old=before.get(el.dataset.id),slot=el.closest('.card-slot'),now=slot.getBoundingClientRect();
+       if(!old)return null;
+       const dx=old.left-now.left,dy=old.top-now.top;
+       if(Math.abs(dx)<1&&Math.abs(dy)<1)return null;
+       return slot.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:'translate(0,0)'}],{
+         duration:520,easing:'cubic-bezier(.22,.8,.25,1)'
+       }).finished.catch(()=>{});
+     }).filter(Boolean);
+     await Promise.all(moves);
+     await sleep(140);
+   }
+   // 第二階段：只收集未翻開的卡牌；已翻開牌保持在最後且全程可見。
+   const slots=[...grid.querySelectorAll('.card-slot')].slice(0,hidden.length);
+   let ghosts=[];
+   if(!reduced){
+     layer=document.createElement('div');
+     layer.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9;overflow:hidden';
+     document.body.append(layer);
+     const rects=slots.map(x=>x.getBoundingClientRect());
+     const centerX=innerWidth/2,centerY=innerHeight/2;
+     ghosts=slots.map((slot,i)=>{
+       const r=rects[i],g=slot.cloneNode(true);
+       g.style.cssText=`position:absolute;left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;perspective:900px;will-change:transform;`;
+       layer.append(g);
+       const dx=centerX-(r.left+r.width/2),dy=centerY-(r.top+r.height/2);
+       const a=g.animate([{transform:'translate(0,0) rotate(0deg)'},{transform:`translate(${dx}px,${dy}px) rotate(${(i%5-2)*5}deg)`}],{duration:650,easing:'cubic-bezier(.25,.75,.25,1)',fill:'forwards'});
+       return {g,a,r,dx,dy};
+     });
+     grid.classList.add('shuffle-in-progress');
+     await Promise.all(ghosts.map(x=>x.a.finished.catch(()=>{})));
+     await Promise.all(ghosts.map((x,i)=>x.g.animate([
+       {transform:`translate(${x.dx}px,${x.dy}px) rotate(0deg)`},
+       {transform:`translate(${x.dx+(i%2?34:-34)}px,${x.dy+(i%3-1)*12}px) rotate(${i%2?12:-12}deg)`},
+       {transform:`translate(${x.dx}px,${x.dy}px) rotate(0deg)`}
+     ],{duration:720,iterations:2,easing:'ease-in-out'}).finished.catch(()=>{})));
+   }
+   // 第三階段：洗牌只改變未翻開牌的映射，已翻開牌的順序與狀態不動。
+   mix(hidden);state.cards=[...hidden,...shown];save();
+   render();
+   if(!reduced&&layer){
+     grid.classList.add('shuffle-in-progress');
+     const targets=[...grid.querySelectorAll('.card-slot')].slice(0,hidden.length).map(x=>x.getBoundingClientRect());
+     await Promise.all(ghosts.map((x,i)=>{
+       const t=targets[i];
+       const dx=innerWidth/2-(x.r.left+x.r.width/2),dy=innerHeight/2-(x.r.top+x.r.height/2);
+       const tx=t.left-x.r.left,ty=t.top-x.r.top;
+       return x.g.animate([{transform:`translate(${dx}px,${dy}px) scale(.92)`,opacity:1},
+         {transform:`translate(${tx}px,${ty}px) scale(1)`,opacity:1}],
+         {duration:560,delay:i*35,easing:'cubic-bezier(.2,.8,.2,1)',fill:'forwards'}).finished.catch(()=>{});
+     }));
+   }
+ }finally{
+   if(layer)layer.remove();
+   grid.classList.remove('shuffle-in-progress');
+   busy=false;history=[];render();
+ }
+}
+async function autoFlip(){if(!state||busy||complete())return;if(auto){stopAuto=true;$('auto').textContent='正在暫停…';return}auto=true;stopAuto=false;render();while(!stopAuto&&!complete()){const next=state.cards.find(c=>c.status==='hidden');if(!next)break;await flip(next.id,true);if(stopAuto||complete())break;await sleep(300)}auto=false;stopAuto=false;render()}function newGame(list,mode,target){activeToken++;auto=false;busy=false;history=[];state={cards:mix(list.map((name,id)=>({id:String(id),name,status:'hidden',order:-1}))),mode,target,nextOrder:0,original:list};show('play');render();doShuffle(true)}function start(){const list=namesFromText(),target=Number($('target').value),mode=document.querySelector('input[name="mode"]:checked').value;if(!list.length){$('setupMsg').textContent='請先輸入至少一位參加者。';return}if(list.length>300){$('setupMsg').textContent='目前最多支援 300 位參加者。';return}if(!Number.isInteger(target)||target<1||target>list.length){$('setupMsg').textContent=`中獎人數必須介於 1 到 ${list.length}。`;return}const seen=new Set(),duplicates=[];for(const n of list){if(seen.has(n)&&!duplicates.includes(n))duplicates.push(n);seen.add(n)}if(duplicates.length&&!confirm(`偵測到重複名稱：${duplicates.slice(0,8).join('、')}${duplicates.length>8?'…':''}\n同名者會各自擁有一張卡牌。確定保留並開始嗎？`))return;if(state&&!confirm('開始新的抽獎會覆蓋目前已儲存的進度，確定嗎？'))return;$('setupMsg').textContent='';newGame(list,mode,target)}function summarize(){if(!state||!complete())return;show('summary');const wins=state.cards.filter(c=>c.status==='win').sort((a,b)=>a.order-b.order);const others=state.cards.filter(c=>c.status!=='win').sort((a,b)=>a.order-b.order);$('summaryStats').textContent=`${state.mode==='winner'?'中獎模式':'淘汰模式'} · 參加 ${state.cards.length} 人 · 中獎 ${wins.length} 人 · 未中獎／淘汰 ${others.length} 人`;$('winnerGrid').replaceChildren(...wins.map((c,i)=>{const d=document.createElement('div');d.className='winner-item';const sm=document.createElement('small');sm.textContent=`第 ${i+1} 位`;d.append(sm,document.createTextNode(c.name));return d}));$('otherTitle').textContent='未中獎／淘汰名單';$('otherNames').textContent=others.map(c=>c.name).join('、')||'無'}function backSetup(){if(busy||auto)return;if(!confirm('返回設定頁面？目前抽獎進度將保留，可隨時繼續。'))return;$('names').value=state.original.join('\n');$('target').value=state.target;document.querySelector(`input[name="mode"][value="${state.mode}"]`).checked=true;count();show('setup');updateResume()}function restart(){if(!state||busy||auto)return;if(!confirm('使用相同名單重新抽獎？目前結果將被清除。'))return;newGame([...state.original],state.mode,state.target)}function switchPlayMode(next){
+ if(!state||busy||auto||!['winner','elimination'].includes(next)||next===state.mode){if(state)$('playMode').value=state.mode;return}
+ // 切換僅影響後續翻牌：保留所有已揭曉結果、順序與牌堆。
+ state.mode=next;
+ // 不清除歷史，讓先前的翻牌仍能撤銷；模式本身不列入撤銷操作。
+ document.querySelector(`input[name="mode"][value="${next}"]`).checked=true;
+ render();
+}
+$('playMode').addEventListener('change',e=>switchPlayMode(e.target.value));
+$('names').addEventListener('input',count);$('theme').addEventListener('change',e=>{applyTheme(e.target.value);if(state&&$('play').classList.contains('hidden')===false)render()});$('sound').addEventListener('click',()=>{soundOn=!soundOn;$('sound').textContent=soundOn?'🔊':'🔇'});$('fullscreen').addEventListener('click',()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()});$('start').addEventListener('click',start);$('resume').addEventListener('click',()=>{try{const s=JSON.parse(getStored(KEY));if(validState(s)){state=s;history=[];show(complete()?'summary':'play');if(complete())summarize();else render()}}catch(e){}});$('shuffle').addEventListener('click',()=>doShuffle());$('undo').addEventListener('click',restoreHistory);$('auto').addEventListener('click',autoFlip);$('back').addEventListener('click',backSetup);$('restart').addEventListener('click',restart);$('results').addEventListener('click',summarize);$('again').addEventListener('click',restart);$('summaryBack').addEventListener('click',()=>{if(!confirm('返回設定頁面？結果仍會保留，直到開始新的抽獎。'))return;$('names').value=state.original.join('\n');$('target').value=state.target;document.querySelector(`input[name="mode"][value="${state.mode}"]`).checked=true;count();show('setup');updateResume()});$('overlay').addEventListener('click',()=>{if(overlayResolve)overlayResolve()});$('overlay').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&overlayResolve){e.preventDefault();overlayResolve()}});applyTheme(getStored(THEME)||'minimal');updateResume();count();})();
+</script></body></html>
